@@ -124,7 +124,7 @@ and add the following changes from this file:
 engines.tk-harmony.location:
   type: git
   path: https://github.com/diegogarciahuerta/tk-harmony.git
-  version: v1.0.0
+  version: v1.0.3
 ```
 
 **Do not forget to update the version of the engine to the latest one. You can check here which one is the [latest version](https://github.com/diegogarciahuerta/tk-harmony/releases)**
