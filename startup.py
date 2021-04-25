@@ -250,6 +250,11 @@ class HarmonyLauncher(SoftwareLauncher):
         self.logger.debug("Launch info: %s" % args)
 
         ensure_scripts_up_to_date(resources_packages_path, user_scripts_path)
+        # Launch bootstrap python client engine
+        popen_env = os.environ.copy()
+        popen_env.update(required_env)
+        cmd = '"%s" "%s"' % (popen_env["SGTK_HARMONY_ENGINE_PYTHON"], popen_env["SGTK_HARMONY_ENGINE_STARTUP"])
+        subprocess.Popen(cmd, env=popen_env)
 
         return LaunchInformation(exec_path, args, required_env)
 

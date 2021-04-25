@@ -39,3 +39,6 @@ pip-log.txt
 .DS_Store
 
 *.*~
+
+# tk-harmony
+install_complete

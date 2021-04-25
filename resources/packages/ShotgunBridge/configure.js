@@ -1438,7 +1438,6 @@ function Shotgun()
     {
         engine = new Engine();
         engine.start();
-        bootstrap();
         app.shotgun_engine = engine;
 
         // connect callbacks to the engine
@@ -1487,88 +1486,6 @@ function ShotgunMenu()
             engine.show_menu();
             engine.refresh_title();
         }
-    }
-}
-
-function bootstrap()
-{
-
-    var SGTK_HARMONY_ENGINE_RESOURCES_PATH = System.getenv("SGTK_HARMONY_ENGINE_RESOURCES_PATH");
-
-    //MessageLog.trace("Including : " + SGTK_HARMONY_ENGINE_RESOURCES_PATH+"/startup/client.js");
-    //include(SGTK_HARMONY_ENGINE_RESOURCES_PATH+"/startup/client.js");
-
-    // MessageLog.trace("Including : " + SGTK_HARMONY_ENGINE_RESOURCES_PATH+"/startup/ui.js");
-    // include(SGTK_HARMONY_ENGINE_RESOURCES_PATH+"/startup/ui.js");
-
-    var app = QCoreApplication.instance();
-    var engine_is_up = typeof(app.__SGTK_STARTUP_INIT__) != "undefined";
-    if (engine_is_up)
-        engine_is_up = engine_is_up && typeof(app.shotgun) != "undefined";
-
-    if (engine_is_up)
-        engine_is_up = engine_is_up && typeof(app.shotgun.engine_process) != "undefined";
-
-    if (engine_is_up)
-        engine_is_up = engine_is_up && app.shotgun.engine_process.isAlive() == true;
-
-    MessageLog.trace("engine_is_up:" + engine_is_up);
-    if (engine_is_up)
-        MessageLog.trace("app.shotgun.engine_process:" + app.shotgun.engine_process);
-
-    var do_startup = !engine_is_up;
-    MessageLog.trace("do_startup:" + do_startup);
-
-    if (do_startup)
-    {
-        if (typeof(app.shotgun) === "undefined")
-            app.shotgun = {};
-
-        MessageLog.trace('-------------------------');
-        MessageLog.trace('Shotgun startup started');
-        MessageLog.trace('-------------------------');
-
-        var python_exec = System.getenv('SGTK_HARMONY_ENGINE_PYTHON');
-        var boostrap_py = System.getenv('SGTK_HARMONY_ENGINE_STARTUP');
-        var engine_name = 'tk-harmony';
-        var engine_port = System.getenv('SGTK_HARMONY_ENGINE_PORT');
-        var app_id = 'basic.*`';
-        MessageLog.trace('Initializing Shotgun Harmony engine ...');
-        MessageLog.trace('   engine name: ' + engine_name);
-        MessageLog.trace('   engine port: ' + engine_port );
-        MessageLog.trace('   engine app id: ' + app_id);
-        MessageLog.trace('   engine python: ' + python_exec);
-        MessageLog.trace('   engine bootstrap: ' + boostrap_py);
-
-        var engine_process = new Process2(python_exec, boostrap_py,  engine_port, engine_name, app_id);  
-        MessageLog.trace('About to execute: ');
-        MessageLog.trace(engine_process.commandLine());
-
-        var error = engine_process.launchAndDetach();
-        MessageLog.trace('error ' + error );
-
-        app.shotgun.window = null;
-        app.shotgun.engine_name = engine_name;
-
-        app.shotgun.engine_process = engine_process;
-        app.shotgun.engine_pid = engine_process.pid();
-
-        app.shotgun.engine_host = "localhost";
-        app.shotgun.engine_port = parseInt(engine_port);
-
-        app.shotgun.debug = true;
-
-        MessageLog.trace("Registered onAboutToQuit callback: " + app.aboutToQuit);
-        app.aboutToQuit.connect(app, app.shotgun.engine_process.terminate);
-
-        app.__SGTK_STARTUP_INIT__ = true;
-
-        MessageLog.trace('Shotgun startup finished.');
-        MessageLog.trace('-------------------------');
-    }
-    else
-    {
-        MessageLog.trace(this.__SGTK_STARTUP_INIT__);
     }
 }
 
