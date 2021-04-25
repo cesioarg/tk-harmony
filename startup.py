@@ -9,12 +9,10 @@
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
 import os
-import re
 import sys
 import shutil
 import hashlib
 import socket
-import platform
 import subprocess
 
 import sgtk
